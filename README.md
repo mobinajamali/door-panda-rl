@@ -1,5 +1,5 @@
-# robot-manipulation
-Teaching manipulator robot to open the door using Reinforcement Learning (Twin-Delayed Deep Deterministic Policy Gradient (TD3))!
+# door-panda-rl
+Teaching manipulator robot, Panda, to open the door using Reinforcement Learning (Twin-Delayed Deep Deterministic Policy Gradient (TD3))!
 
 ![Robot Manipulation Video](./thumbnails/video-ezgif.com-video-to-gif-converter.gif)
 
@@ -9,7 +9,7 @@ Teaching manipulator robot to open the door using Reinforcement Learning (Twin-D
 
 **Clone this repository**
 ```bash
-git@github.com:mobinajamali/robot-manipulation.git
+git@github.com:mobinajamali/door-panda-rl.git
 ```
 
 **Install PyTorch**
