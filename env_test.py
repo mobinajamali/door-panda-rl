@@ -1,16 +1,16 @@
-import time
 import os
-import gym
+import cv2 as cv
 import numpy as np
 import robosuite as suite
 from robosuite.wrappers import GymWrapper
 from agent import Agent
 
+
 # test how the agent is doing
 if __name__ == '__main__':
 
-    if not os.path.exists('tmp/td3'):
-        os.makedirs('tmp/td3')
+    if not os.path.exists('./thumbnails'):
+        os.makedirs('./thumbnails')
 
     # env setup
     env_name = 'Door'
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         controller_configs=suite.load_controller_config(default_controller='JOINT_VELOCITY'),
         has_renderer=True,
         use_camera_obs=False,
-        horizon=75,
+        horizon=70,
         render_camera='frontview', # show some rendering on screen
         has_offscreen_renderer=True,
         reward_shaping=True,
@@ -29,6 +29,11 @@ if __name__ == '__main__':
 
     env = GymWrapper(env)
 
+    # define video recording params
+    video_path = './thumbnails/video.mp4'  
+    frame_width = 640
+    frame_height = 480
+    frame_rate = 30.0  
 
     actor_learning_rate = 0.001
     critic_learning_rate = 0.001
@@ -54,6 +59,10 @@ if __name__ == '__main__':
 
     agent.load_models()
 
+    # initialize video writter
+    fourcc = cv.VideoWriter_fourcc(*'mp4v')  
+    out = cv.VideoWriter(video_path, fourcc, frame_rate, (frame_width, frame_height))
+
     # training loop
     for i in range(n_games):
         observation = env.reset()
@@ -64,8 +73,17 @@ if __name__ == '__main__':
             action = agent.choose_action(observation, validation=True)
             next_observation, reward, done, info = env.step(action)
             env.render()
+
+            # capture the current screen render and write out
+            frame = env.sim.render(width=frame_width, height=frame_height, camera_name="frontview")
+            frame = np.flipud(frame)
+            frame_bgr = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
+            out.write(frame_bgr)
+
             score += reward
             observation = next_observation
             #time.sleep(0.03)
 
         print(f'episode: {i}, score: {score}')
+
+    out.release()
