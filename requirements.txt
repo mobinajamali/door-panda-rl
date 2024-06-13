@@ -1,0 +1,10 @@
+gym==0.23.0
+pybullet==3.2.6
+matplotlib==3.8.2
+tensorboard==2.15.1
+robosuite==1.4.0
+termcolor==2.4.0
+h5py==3.10.0
+torch
+torchvision
+torchaudio
